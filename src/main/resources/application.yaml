@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: studentTaskTracker
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/studentTaskTracker
+    username: user
+    password: secret
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardIml
+    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+  api-docs:
+    path: /api-docs
+
+  show-actuator: true

@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: studentTaskTracker-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: studentTaskTracker
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: secret
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  app:
+    build: .                          # будет использовать Dockerfile в корне проекта
+    container_name: studentTaskTracker-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/studentTaskTracker
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: secret
+
+volumes:
+  pg_data:
