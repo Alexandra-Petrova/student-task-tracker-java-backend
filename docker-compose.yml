@@ -16,7 +16,7 @@ services:
       - pg_data:/var/lib/postgresql/data
 
   app:
-    build: .                          # будет использовать Dockerfile в корне проекта
+    build: .
     container_name: studentTaskTracker-app
     restart: unless-stopped
     ports:

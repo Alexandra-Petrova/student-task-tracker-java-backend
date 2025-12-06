@@ -1,12 +1,17 @@
 package com.example.studentTaskTracker;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.*;
-import org.springframework.context.annotation.*;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
+@SecurityScheme(name = "Auth", bearerFormat = "JWT", scheme = "bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
+@OpenAPIDefinition
 public class StudentTaskTrackerApplication {
 
 	public static void main(String[] args) {
@@ -14,19 +19,3 @@ public class StudentTaskTrackerApplication {
 	}
 
 }
-
-@Configuration
-class SecurityConfig {
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())                // отключаем CSRF, иначе Swagger выдаёт 403
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()               // разрешаем все запросы
-                );
-
-        return http.build();
-    }
-}
-

@@ -1,7 +1,7 @@
 package com.example.studentTaskTracker.controller;
 
-import com.example.studentTaskTracker.dto.TaskRequestDto;
-import com.example.studentTaskTracker.dto.TaskResponseDto;
+import com.example.studentTaskTracker.dto.request.TaskRequest;
+import com.example.studentTaskTracker.dto.response.TaskResponse;
 import com.example.studentTaskTracker.entity.Task;
 import com.example.studentTaskTracker.mapper.TaskMapper;
 import com.example.studentTaskTracker.service.TaskService;
@@ -44,28 +44,28 @@ public class TaskController {
     }
 
     @PostMapping
-    public TaskResponseDto create(@RequestBody TaskRequestDto dto) {
+    public TaskResponse create(@RequestBody TaskRequest dto) {
         Task task = taskService.create(taskMapper.toEntity(dto));
         return taskMapper.asResponse(task);
     }
 
     @GetMapping("/{id}")
-    public TaskResponseDto getById(@PathVariable Long id) {
+    public TaskResponse getById(@PathVariable Long id) {
         Task task = taskService.getById(id);
         return taskMapper.asResponse(task);
     }
 
     @GetMapping
-    public List<TaskResponseDto> getAll() {
+    public List<TaskResponse> getAll() {
         return taskService.getAll().stream()
                 .map(taskMapper::asResponse)
                 .toList();
     }
 
     @PutMapping("/{id}")
-    public TaskResponseDto update(
+    public TaskResponse update(
             @PathVariable Long id,
-            @RequestBody TaskRequestDto dto) {
+            @RequestBody TaskRequest dto) {
 
         Task task = taskMapper.toEntity(dto);
         Task updatedTask = taskService.update(id, task);
@@ -78,19 +78,19 @@ public class TaskController {
     }
 
     @PostMapping("/{taskId}/group/{groupId}")
-    public TaskResponseDto addToGroup(@PathVariable Long taskId, @PathVariable Long groupId) {
+    public TaskResponse addToGroup(@PathVariable Long taskId, @PathVariable Long groupId) {
         Task task = taskService.addTaskToGroup(taskId, groupId);
         return taskMapper.asResponse(task);
     }
 
     @PutMapping("/{taskId}/group/{groupId}")
-    public TaskResponseDto moveToGroup(@PathVariable Long taskId, @PathVariable Long groupId) {
+    public TaskResponse moveToGroup(@PathVariable Long taskId, @PathVariable Long groupId) {
         Task task = taskService.moveTaskToGroup(taskId, groupId);
         return taskMapper.asResponse(task);
     }
 
     @DeleteMapping("/{taskId}/group")
-    public TaskResponseDto deleteFromGroup(@PathVariable Long taskId) {
+    public TaskResponse deleteFromGroup(@PathVariable Long taskId) {
         Task task = taskService.deleteTaskFromGroup(taskId);
         return taskMapper.asResponse(task);
     }

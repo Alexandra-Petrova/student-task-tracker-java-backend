@@ -1,7 +1,7 @@
 package com.example.studentTaskTracker.controller;
 
-import com.example.studentTaskTracker.dto.TaskGroupRequestDto;
-import com.example.studentTaskTracker.dto.TaskGroupResponseDto;
+import com.example.studentTaskTracker.dto.request.TaskGroupRequest;
+import com.example.studentTaskTracker.dto.response.TaskGroupResponse;
 import com.example.studentTaskTracker.entity.TaskGroup;
 import com.example.studentTaskTracker.mapper.TaskGroupMapper;
 import com.example.studentTaskTracker.service.TaskGroupService;
@@ -21,28 +21,28 @@ public class TaskGroupController {
     }
 
     @PostMapping
-    public TaskGroupResponseDto create(@RequestBody TaskGroupRequestDto dto) {
+    public TaskGroupResponse create(@RequestBody TaskGroupRequest dto) {
         TaskGroup group = groupService.create(groupMapper.toEntity(dto));
         return groupMapper.asResponse(group);
     }
 
     @GetMapping("/{id}")
-    public TaskGroupResponseDto getById(@PathVariable Long id) {
+    public TaskGroupResponse getById(@PathVariable Long id) {
         TaskGroup group = groupService.getById(id);
         return groupMapper.asResponse(group);
     }
 
     @GetMapping
-    public List<TaskGroupResponseDto> getAll() {
+    public List<TaskGroupResponse> getAll() {
         return groupService.getAll().stream()
                 .map(groupMapper::asResponse)
                 .toList();
     }
 
     @PutMapping("/{id}")
-    public TaskGroupResponseDto update(
+    public TaskGroupResponse update(
             @PathVariable Long id,
-            @RequestBody TaskGroupRequestDto dto) {
+            @RequestBody TaskGroupRequest dto) {
 
         TaskGroup group = groupMapper.toEntity(dto);
         TaskGroup updatedGroup = groupService.update(id, group);

@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-//    List<User> findByNameStartsWithIgnoreCase(String prefix);
+    User findByEmail(String email);
 
-    // запрос на чтение
-//    @Query(value = "select a from User where a.name like :name", nativeQuery = true)
-//    List<User> searchByName(@Param("name") String name);
+    boolean existsByEmail(String email);
 }

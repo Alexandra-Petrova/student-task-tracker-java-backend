@@ -1,7 +1,7 @@
 package com.example.studentTaskTracker.mapper;
 
-import com.example.studentTaskTracker.dto.TaskRequestDto;
-import com.example.studentTaskTracker.dto.TaskResponseDto;
+import com.example.studentTaskTracker.dto.request.TaskRequest;
+import com.example.studentTaskTracker.dto.response.TaskResponse;
 import com.example.studentTaskTracker.entity.Task;
 import com.example.studentTaskTracker.entity.TaskGroup;
 import com.example.studentTaskTracker.repository.TaskGroupRepository;
@@ -15,8 +15,8 @@ public class TaskMapper {
         this.groupRepository = groupRepository;
     }
 
-    public TaskResponseDto asResponse(Task task) {
-        return new TaskResponseDto(
+    public TaskResponse asResponse(Task task) {
+        return new TaskResponse(
                 task.getId(),
                 task.getName(),
                 task.getDescription(),
@@ -28,7 +28,7 @@ public class TaskMapper {
         );
     }
 
-    public Task toEntity (TaskRequestDto dto) {
+    public Task toEntity (TaskRequest dto) {
         Task task = new Task();
         task.setName(dto.name());
         task.setDescription(dto.description());
