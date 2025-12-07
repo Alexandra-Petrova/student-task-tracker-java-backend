@@ -60,9 +60,9 @@ public class JwtSecurityConfig {
         ).authorizeHttpRequests(
                 (authorizationManagerRequestMatcherRegistry) ->
                         authorizationManagerRequestMatcherRegistry
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/**").authenticated()
-                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .requestMatchers(
                                         "/actuator",
                                         "/actuator/**",

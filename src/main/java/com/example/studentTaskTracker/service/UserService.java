@@ -18,8 +18,4 @@ public interface UserService {
     UserResponse update(Long id, UserRequest request) throws NotFoundException;
 
     void delete(Long id) throws NotFoundException;
-
-    void getAdmin() throws NotFoundException;
-
-
 }

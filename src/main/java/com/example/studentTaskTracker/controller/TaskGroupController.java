@@ -24,8 +24,9 @@ public class TaskGroupController {
 
     @PostMapping
     public TaskGroupResponse create(@RequestBody TaskGroupRequest dto) {
-        TaskGroup group = groupService.create(groupMapper.toEntity(dto));
-        return groupMapper.asResponse(group);
+        TaskGroup group = groupMapper.toEntity(dto);
+        TaskGroup saved = groupService.create(group);
+        return groupMapper.asResponse(saved);
     }
 
     @GetMapping("/{id}")

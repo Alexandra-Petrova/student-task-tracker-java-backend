@@ -8,6 +8,7 @@ import com.example.studentTaskTracker.dto.response.exception.AlreadyExistsExcept
 import com.example.studentTaskTracker.dto.response.exception.InvalidCredentialsException;
 import com.example.studentTaskTracker.dto.response.exception.InvalidJwtException;
 import com.example.studentTaskTracker.service.AuthenticationService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ public class AuthControllerImpl implements AuthController {
     }
 
     @PostMapping("/sign-up")
-    public JwtAuthenticationResponse signUp(@RequestBody SignUpRequest signUpRequest) throws AlreadyExistsException {
+    public JwtAuthenticationResponse signUp(@RequestBody @Valid SignUpRequest signUpRequest) throws AlreadyExistsException {
         return authenticationService.signUp(signUpRequest);
     }
 

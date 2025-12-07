@@ -11,6 +11,7 @@ import com.example.studentTaskTracker.entity.RefreshToken;
 import com.example.studentTaskTracker.entity.Role;
 import com.example.studentTaskTracker.entity.User;
 import com.example.studentTaskTracker.repository.RefreshTokenRepository;
+import com.example.studentTaskTracker.repository.UserRepository;
 import com.example.studentTaskTracker.security.config.JwtConfig;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,6 +33,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserDetailsService userDetailsService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtConfig jwtConfig;
+    private final UserRepository userRepository;
 
     public AuthenticationServiceImpl(
             UserService userService,
@@ -40,7 +42,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             AuthenticationManager authenticationManager,
             UserDetailsService userDetailsService,
             RefreshTokenRepository refreshTokenRepository,
-            JwtConfig jwtConfig
+            JwtConfig jwtConfig,
+            UserRepository userRepository
     ) {
         this.userService = userService;
         this.jwtService = jwtService;
@@ -49,13 +52,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.userDetailsService = userDetailsService;
         this.refreshTokenRepository = refreshTokenRepository;
         this.jwtConfig = jwtConfig;
+        this.userRepository = userRepository;
     }
 
     @Override
     public JwtAuthenticationResponse signUp(SignUpRequest request) throws AlreadyExistsException {
         User user = new User(
-                request.firstName(),
-                request.lastName(),
                 request.email(),
                 passwordEncoder.encode(request.password()),
                 Role.ROLE_USER
@@ -68,7 +70,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         refreshTokenRepository.save(new RefreshToken(refreshToken, user.getUsername()));
 
-        return new JwtAuthenticationResponse(accessToken, refreshToken);
+        return new JwtAuthenticationResponse(accessToken, refreshToken, user.getId());
     }
 
     @Override
@@ -80,6 +82,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         UserDetails currentUserDetails = userDetailsService.loadUserByUsername(extractedUsername);
+
+        User currentUser = userRepository.findByEmail(currentUserDetails.getUsername());
+
         RefreshToken refreshToken = refreshTokenRepository.findByValue(token);
         if (refreshToken == null || !jwtService.isTokenValid(token, currentUserDetails) ||
                 !currentUserDetails.getUsername().equals(refreshToken.getOwnerUsername())) {
@@ -87,7 +92,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         String newAccessToken = generateAccessToken(currentUserDetails);
-        return new JwtAuthenticationResponse(newAccessToken, refreshToken.getValue());
+        return new JwtAuthenticationResponse(newAccessToken, refreshToken.getValue(), currentUser.getId());
     }
 
     private String generateAccessToken(UserDetails user) {
@@ -110,39 +115,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         UserDetails user = userDetailsService.loadUserByUsername(request.email());
 
+        User currentUser = userRepository.findByEmail(user.getUsername());
+
         String accessToken = generateAccessToken(user);
         String refreshToken = generateRefreshToken(user);
 
         RefreshToken oldToken = refreshTokenRepository.findByOwnerUsername(user.getUsername());
         if (oldToken == null) {
-//            throw new InvalidJwtException();
             oldToken = new RefreshToken(refreshToken, user.getUsername());
         } else {
             oldToken.setValue(refreshToken);
         }
         refreshTokenRepository.save(oldToken);
 
-        return new JwtAuthenticationResponse(accessToken, refreshToken);
-
-
-//        authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(request.email(), request.password())
-//        );
-//
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(request.email());
-//        String accessToken = generateAccessToken(userDetails);
-//        String refreshToken = generateRefreshToken(userDetails);
-//
-//        // Всегда сохраняем/перезаписываем refresh token
-//        refreshTokenRepository.upsert(refreshToken, userDetails.getUsername());
-//        // или если нет upsert — вот так:
-//        RefreshToken token = refreshTokenRepository
-//                .findByOwnerUsername(userDetails.getUsername())
-//                .orElse(new RefreshToken());
-//        token.setValue(refreshToken);
-//        token.setOwnerUsername(userDetails.getUsername());
-//        refreshTokenRepository.save(token);
-//
-//        return new JwtAuthenticationResponse(accessToken, refreshToken);
+        return new JwtAuthenticationResponse(accessToken, refreshToken, currentUser.getId());
     }
 }

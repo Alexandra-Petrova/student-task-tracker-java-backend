@@ -1,6 +1,5 @@
 package com.example.studentTaskTracker.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +20,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id = 0L;
+    private Long id;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -31,13 +30,7 @@ public class User implements UserDetails {
         this.createdAt = LocalDateTime.now();
     }
 
-    @Column(nullable = false, length = 20)
-    private String firstName;
-
-    @Column(nullable = false, length = 20)
-    private String lastName;
-
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, unique = true, length = 50)
     private String email;
 
     @Column(nullable = false, length = 120)
@@ -57,9 +50,7 @@ public class User implements UserDetails {
 
     }
 
-    public User(String firstName, String lastName, String email, String password, Role role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String email, String password, Role role) {
         this.email = email;
         this.password = password;
         this.role = role;

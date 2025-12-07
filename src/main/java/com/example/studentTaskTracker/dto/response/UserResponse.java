@@ -8,8 +8,6 @@ public record UserResponse(
         Long id,
         LocalDateTime createdAt,
         String email,
-        String firstName,
-        String lastName,
         Role role
 ) {
 }

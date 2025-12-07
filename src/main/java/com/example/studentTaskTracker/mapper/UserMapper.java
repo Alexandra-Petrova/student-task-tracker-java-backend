@@ -15,17 +15,12 @@ public class UserMapper {
                 user.getId(),
                 user.getCreatedAt(),
                 user.getEmail(),
-                user.getFirstName(),
-                user.getLastName(),
                 user.getRole()
         );
     }
 
     public User update(User user, UserRequest request) {
         user.setEmail(request.email());
-        user.setFirstName(request.firstName());
-        user.setLastName(request.lastName());
-
         return user;
     }
 
