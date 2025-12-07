@@ -2,6 +2,7 @@ package com.example.studentTaskTracker.service;
 
 import com.example.studentTaskTracker.entity.Task;
 import com.example.studentTaskTracker.entity.TaskGroup;
+import com.example.studentTaskTracker.entity.User;
 import com.example.studentTaskTracker.repository.TaskGroupRepository;
 import com.example.studentTaskTracker.repository.TaskRepository;
 import jakarta.transaction.Transactional;

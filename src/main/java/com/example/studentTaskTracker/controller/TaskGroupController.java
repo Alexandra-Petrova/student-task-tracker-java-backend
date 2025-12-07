@@ -5,10 +5,12 @@ import com.example.studentTaskTracker.dto.response.TaskGroupResponse;
 import com.example.studentTaskTracker.entity.TaskGroup;
 import com.example.studentTaskTracker.mapper.TaskGroupMapper;
 import com.example.studentTaskTracker.service.TaskGroupService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@SecurityRequirement(name = "Auth")
 @RestController
 @RequestMapping("/api/task-groups")
 public class TaskGroupController {

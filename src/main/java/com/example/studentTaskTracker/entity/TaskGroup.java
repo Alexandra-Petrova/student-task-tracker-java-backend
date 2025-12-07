@@ -25,6 +25,10 @@ public class TaskGroup {
     @OneToMany(mappedBy = "group")
     private List<Task> tasks = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User userOwner;
+
     public TaskGroup () {
 
     }

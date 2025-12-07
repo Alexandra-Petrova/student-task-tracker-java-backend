@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/admin/user")
 public class ControllerImpl implements Controller {
 
     public ControllerImpl(UserService service) {
@@ -19,30 +20,30 @@ public class ControllerImpl implements Controller {
     private final UserService service;
 
     @Override
-    @GetMapping("/user/api/get-admin")
+    @GetMapping("/get-admin")
     public void getAdmin() throws NotFoundException {
         service.getAdmin();
     }
 
-    @GetMapping("/admin/api/user")
+    @GetMapping
     @Override
     public List<UserResponse> list() {
         return service.list();
     }
 
-    @GetMapping("/admin/api/user/{id}")
+    @GetMapping("/{id}")
     @Override
     public UserResponse getById(@PathVariable Long id) throws NotFoundException {
         return service.getById(id);
     }
 
     @Override
-    @PutMapping("/admin/api/user/{id}")
+    @PutMapping("/{id}")
     public UserResponse update(@PathVariable Long id, @RequestBody UserRequest request) throws NotFoundException {
         return service.update(id, request);
     }
 
-    @DeleteMapping("/admin/api/user/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public DeletedResponse delete(@PathVariable Long id) throws NotFoundException {
         service.delete(id);

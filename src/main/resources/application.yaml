@@ -18,11 +18,11 @@ spring:
       hibernate:
         format_sql: true
 
-  security:
-    user:
-      name: ${SEC_USER_NAME:admin@mail.ru}
-      password: ${SEC_USER_PASSWORD:password}
-      roles: ADMIN
+#  security:
+#    user:
+#      name: ${SEC_USER_NAME:admin@mail.ru}
+#      password: ${SEC_USER_PASSWORD:password}
+#      roles: ADMIN
 
   jackson:
     mapper:

@@ -60,9 +60,9 @@ public class JwtSecurityConfig {
         ).authorizeHttpRequests(
                 (authorizationManagerRequestMatcherRegistry) ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/user/api/**").hasRole("USER")
-                                .requestMatchers("/admin/api/**").hasRole("ADMIN")
+                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/api/**").authenticated()
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .requestMatchers(
                                         "/actuator",
                                         "/actuator/**",
@@ -75,7 +75,7 @@ public class JwtSecurityConfig {
                                         "/swagger-ui/**",
                                         "/v3/api-docs*/**"
                                 ).permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().denyAll()
         ).sessionManagement(
                 (httpSecuritySessionManagementConfigurer) ->
                         httpSecuritySessionManagementConfigurer

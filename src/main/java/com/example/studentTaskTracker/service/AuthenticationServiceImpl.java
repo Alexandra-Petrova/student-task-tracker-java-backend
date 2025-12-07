@@ -116,10 +116,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         RefreshToken oldToken = refreshTokenRepository.findByOwnerUsername(user.getUsername());
         if (oldToken == null) {
 //            throw new InvalidJwtException();
-            refreshTokenRepository.save(new RefreshToken(refreshToken, user.getUsername()));
+            oldToken = new RefreshToken(refreshToken, user.getUsername());
+        } else {
+            oldToken.setValue(refreshToken);
         }
-
-        oldToken.setValue(refreshToken);
         refreshTokenRepository.save(oldToken);
 
         return new JwtAuthenticationResponse(accessToken, refreshToken);
